@@ -93,7 +93,6 @@ function App({ collections = [], isDeployed }) {
 }
 
 export async function getServerSideProps({ req }) {
-  console.log(req.headers)
   try {
     const { 'x-vercel-deployment-url': nowURL } = req.headers;
 
