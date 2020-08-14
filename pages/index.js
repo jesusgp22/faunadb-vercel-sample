@@ -92,9 +92,10 @@ function App({ collections = [], isDeployed }) {
   );
 }
 
-App.getInitialProps = async ({ req }) => {
+export async function getServerSideProps({ req }) {
+  console.log(req.headers)
   try {
-    const { 'x-now-deployment-url': nowURL } = req.headers;
+    const { 'x-vercel-deployment-url': nowURL } = req.headers;
 
     if (!nowURL) {
       throw new NotDeployedError();
@@ -107,14 +108,15 @@ App.getInitialProps = async ({ req }) => {
       throw new Error(error.message);
     }
 
-    return { collections, isDeployed: true };
+    return { props: {collections, isDeployed: true } };
   } catch (error) {
     return {
+      props: {
       error: {
         message: error.message
       },
       isDeployed: error.code !== NOT_DEPLOYED
-    };
+    }};
   }
 };
 
